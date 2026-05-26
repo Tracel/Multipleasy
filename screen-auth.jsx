@@ -16,6 +16,10 @@ function AuthScreen({ onAuth }) {
     return `${u.toLowerCase().trim().replace(/[^a-z0-9_.-]/g, '')}@multipleasy.app`;
   }
 
+  function toPassword(pin) {
+    return `mp_${pin}`;
+  }
+
   function switchTab(t) {
     setTab(t);
     setError('');
@@ -31,7 +35,7 @@ function AuthScreen({ onAuth }) {
     try {
       const { data, error: err } = await window.SupabaseClient.auth.signInWithPassword({
         email: toEmail(username),
-        password,
+        password: toPassword(password),
       });
       if (err) throw err;
       const { data: row } = await window.SupabaseClient
@@ -62,7 +66,7 @@ function AuthScreen({ onAuth }) {
     try {
       const { data, error: err } = await window.SupabaseClient.auth.signUp({
         email: toEmail(trimmed),
-        password,
+        password: toPassword(password),
         options: { data: { username: trimmed } },
       });
       if (err) throw err;
