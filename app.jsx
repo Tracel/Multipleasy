@@ -12,6 +12,8 @@ function App() {
   const [route, setRoute] = React.useState({ name: 'home' });
   const tweaks = TWEAK_DEFAULTS;
   const saveTimerRef = React.useRef(null);
+  const stateRef = React.useRef(state);
+  React.useEffect(() => { stateRef.current = state; }, [state]);
 
   // Check existing session on mount
   React.useEffect(() => {
@@ -56,14 +58,16 @@ function App() {
     MultiplStore.save(state);
     clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
+      const snap = stateRef.current;
       window.SupabaseClient.from('user_progress')
         .upsert(
-          { user_id: authUser.id, data: state, updated_at: new Date().toISOString() },
+          { user_id: authUser.id, data: snap, updated_at: new Date().toISOString() },
           { onConflict: 'user_id' }
         )
-        .then(({ error }) => { if (error) console.error('Supabase save error:', error); });
+        .then(({ error }) => { if (error) console.error('Supabase save error:', error); })
+        .catch(err => console.error('Supabase save rejected:', err));
     }, 2000);
-  }, [state]);
+  }, [state, authUser]);
 
   // Called by AuthScreen after login or signup
   function handleAuth(cloudData, user) {

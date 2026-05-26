@@ -134,15 +134,24 @@ function PracticeScreen({ table, mode, state, onUpdate, onFinish, onBack }) {
   function finishSession() {
     const finalScore = scoreRef.current;
     const finalBest = bestStreakRef.current;
-    const next = { ...state };
-    next.stats = { ...next.stats };
-    next.stats.sessions += 1;
-    const t = { ...next.tables[table] };
-    t.bestStreak = Math.max(t.bestStreak || 0, finalBest);
-    next.tables = { ...next.tables, [table]: t };
-    next.history = [{ mode, table, score: finalScore, total: SESSION_LENGTH, date: Date.now() }, ...(next.history || [])].slice(0, 30);
-    const earned = MultiplStore.checkBadges(next, { bestStreakThisSession: finalBest });
-    onUpdate(next);
+    // Compute earned badges for the results screen using the current (possibly stale) state.
+    // Badge checks are idempotent so a slightly stale snapshot is acceptable for display.
+    const snapForBadges = { ...state };
+    snapForBadges.stats = { ...state.stats, sessions: state.stats.sessions + 1 };
+    const earned = MultiplStore.checkBadges(snapForBadges, { bestStreakThisSession: finalBest });
+    // Use functional update so sessions is always incremented from the latest App state,
+    // not from the potentially-stale closure captured in this render.
+    onUpdate(prev => {
+      const next = { ...prev };
+      next.stats = { ...prev.stats };
+      next.stats.sessions += 1;
+      const t = { ...next.tables[table] };
+      t.bestStreak = Math.max(t.bestStreak || 0, finalBest);
+      next.tables = { ...next.tables, [table]: t };
+      next.history = [{ mode, table, score: finalScore, total: SESSION_LENGTH, date: Date.now() }, ...(next.history || [])].slice(0, 30);
+      MultiplStore.checkBadges(next, { bestStreakThisSession: finalBest });
+      return next;
+    });
     onFinish({ score: finalScore, total: SESSION_LENGTH, bestStreak: finalBest, durationMs: Date.now() - startTime, earned, table, mode });
   }
 
