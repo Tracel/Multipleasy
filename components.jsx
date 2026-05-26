@@ -191,6 +191,20 @@ function SpeechBubble({ children, color = '#fff' }) {
   );
 }
 
+// ------- Vercel Analytics ----------
+function Analytics() {
+  useEffect(() => {
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    if (!document.querySelector('script[src="/_vercel/insights/script.js"]')) {
+      const s = document.createElement('script');
+      s.defer = true;
+      s.src = '/_vercel/insights/script.js';
+      document.head.appendChild(s);
+    }
+  }, []);
+  return null;
+}
+
 Object.assign(window, {
-  Mascot, Star, Stars, Icons, Confetti, Topbar, BottomNav, colorForTable, SpeechBubble,
+  Mascot, Star, Stars, Icons, Confetti, Topbar, BottomNav, colorForTable, SpeechBubble, Analytics,
 });
