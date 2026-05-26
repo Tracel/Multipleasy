@@ -787,7 +787,8 @@ input { font-family: inherit; }
 }
 .onboard p { color: var(--ink-soft); margin: 0 0 22px; font-size: 17px; max-width: 380px; }
 .onboard .form { width: 100%; max-width: 380px; }
-.onboard input[type=text] {
+.onboard input[type=text],
+.onboard input[type=password] {
   width: 100%;
   padding: 16px 20px;
   border-radius: var(--r-pill);
@@ -801,7 +802,61 @@ input { font-family: inherit; }
   text-align: center;
   box-shadow: var(--shadow-sm);
 }
-.onboard input[type=text]:focus { border-color: var(--sky); }
+.onboard input[type=text]:focus,
+.onboard input[type=password]:focus { border-color: var(--sky); }
+
+.onboard .form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+}
+
+/* Auth tabs */
+.auth-tabs {
+  display: flex;
+  background: var(--bg-warm);
+  border: 2px solid var(--line);
+  border-radius: var(--r-pill);
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 22px;
+  width: 100%;
+  max-width: 380px;
+}
+.auth-tabs button {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: var(--r-pill);
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--muted);
+  transition: background .12s ease, color .12s ease, box-shadow .12s ease;
+}
+.auth-tabs button.active {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+
+.auth-error {
+  margin: 0;
+  color: var(--coral-deep);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.auth-color-label {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--muted);
+  text-align: left;
+  margin-bottom: -4px;
+}
 .onboard .color-row {
   display: flex; gap: 12px; justify-content: center; margin: 20px 0 8px;
 }

@@ -1,5 +1,5 @@
 // Progress dashboard
-function ProgressScreen({ state, onPickTable }) {
+function ProgressScreen({ state, onPickTable, onLogout, onReset }) {
   const totals = state.stats.totalCorrect || 0;
   const sessions = state.stats.sessions || 0;
   const speedrun = state.stats.speedrunBest || 0;
@@ -94,14 +94,12 @@ function ProgressScreen({ state, onPickTable }) {
         </>
       )}
 
-      <div style={{ marginTop: 36, textAlign: 'center' }}>
-        <button className="btn btn-ghost btn-sm" onClick={() => {
-          if (confirm('Effacer toute la progression ? Cette action est irréversible.')) {
-            MultiplStore.reset();
-            location.reload();
-          }
-        }}>
+      <div style={{ marginTop: 36, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+        <button className="btn btn-ghost btn-sm" onClick={onReset}>
           Réinitialiser la progression
+        </button>
+        <button className="btn btn-ghost btn-sm" onClick={onLogout} style={{ color: 'var(--muted)' }}>
+          Se déconnecter
         </button>
       </div>
     </div>
