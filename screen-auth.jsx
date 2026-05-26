@@ -56,7 +56,7 @@ function AuthScreen({ onAuth }) {
     const trimmed = username.trim();
     if (trimmed.length < 2) { setError('Le pseudo doit faire au moins 2 caractères.'); return; }
     if (!/^[a-zA-Z0-9_.-]+$/.test(trimmed)) { setError('Pseudo : lettres, chiffres, _ . - seulement.'); return; }
-    if (password.length < 6) { setError('Le mot de passe doit faire au moins 6 caractères.'); return; }
+    if (!/^\d{4}$/.test(password)) { setError('Le code secret doit faire exactement 4 chiffres.'); return; }
     setError('');
     setLoading(true);
     try {
@@ -118,10 +118,12 @@ function AuthScreen({ onAuth }) {
           />
           <input
             type="password"
-            placeholder="Mot de passe"
+            placeholder="Code secret (4 chiffres)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
+            inputMode="numeric"
+            maxLength={4}
           />
           {error && <p className="auth-error">{error}</p>}
           <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
@@ -141,10 +143,12 @@ function AuthScreen({ onAuth }) {
           />
           <input
             type="password"
-            placeholder="Mot de passe (6 caractères min.)"
+            placeholder="Code secret (4 chiffres)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="new-password"
+            inputMode="numeric"
+            maxLength={4}
           />
           <div className="auth-color-label">Ta couleur :</div>
           <div className="color-row" role="radiogroup" aria-label="Choisis ta couleur">
