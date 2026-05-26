@@ -1,14 +1,10 @@
-// Multipl'easy — main app + routing + tweaks panel
-const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "universe": "espace",
-  "energy": "petillant",
-  "tone": "calme"
-}/*EDITMODE-END*/;
+// Multipl'easy — main app + routing
+const TWEAK_DEFAULTS = { universe: "espace", energy: "petillant", tone: "calme" };
 
 function App() {
   const [state, setState] = React.useState(() => MultiplStore.load());
   const [route, setRoute] = React.useState({ name: 'home' });
-  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const tweaks = TWEAK_DEFAULTS;
 
   // Touch streak on load (once)
   React.useEffect(() => {
@@ -54,7 +50,6 @@ function App() {
             MultiplStore.touchStreak(next);
             setState(next);
           }} />
-          {renderTweaksPanel(tweaks, setTweak)}
         </div>
       </TweaksContext.Provider>
     );
@@ -139,49 +134,8 @@ function App() {
           />
         )}
 
-        {renderTweaksPanel(tweaks, setTweak)}
       </div>
     </TweaksContext.Provider>
-  );
-}
-
-function renderTweaksPanel(tweaks, setTweak) {
-  return (
-    <TweaksPanel>
-      <TweakSection label="Univers" />
-      <TweakRadio
-        label="Décor"
-        value={tweaks.universe}
-        options={[
-          { value: 'montagne', label: 'Montagne' },
-          { value: 'espace', label: 'Espace' },
-          { value: 'ocean', label: 'Océan' },
-        ]}
-        onChange={(v) => setTweak('universe', v)}
-      />
-      <TweakSection label="Énergie" />
-      <TweakRadio
-        label="Intensité"
-        value={tweaks.energy}
-        options={[
-          { value: 'doux', label: 'Doux' },
-          { value: 'petillant', label: 'Pétillant' },
-          { value: 'survolte', label: 'Survolté' },
-        ]}
-        onChange={(v) => setTweak('energy', v)}
-      />
-      <TweakSection label="Encouragements" />
-      <TweakRadio
-        label="Ton"
-        value={tweaks.tone}
-        options={[
-          { value: 'calme', label: 'Calme' },
-          { value: 'joyeux', label: 'Joyeux' },
-          { value: 'coach', label: 'Coach' },
-        ]}
-        onChange={(v) => setTweak('tone', v)}
-      />
-    </TweaksPanel>
   );
 }
 
