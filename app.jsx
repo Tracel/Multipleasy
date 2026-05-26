@@ -56,10 +56,12 @@ function App() {
     MultiplStore.save(state);
     clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
-      window.SupabaseClient.from('user_progress').upsert(
-        { user_id: authUser.id, data: state, updated_at: new Date().toISOString() },
-        { onConflict: 'user_id' }
-      );
+      window.SupabaseClient.from('user_progress')
+        .upsert(
+          { user_id: authUser.id, data: state, updated_at: new Date().toISOString() },
+          { onConflict: 'user_id' }
+        )
+        .then(({ error }) => { if (error) console.error('Supabase save error:', error); });
     }, 2000);
   }, [state]);
 
